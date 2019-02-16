@@ -1,0 +1,80 @@
+﻿------------------问题讨论------------------
+
+1. doc1600data test-10data(1)的时候，有个叫“Starship Enterprise”的地名被检测出来了，但到了data test-10data(3)里面就没有了，而这跟我们的改动似乎没有什么关系
+
+错误原因：分号的处理
+
+总结：（1）非逗号和逗号的情况分开处理；		（需处理）
+      （2）不是所有标点都该当成终止符？		（暂搁置）
+解决：符号处理当中先把非逗号的符号去掉，这样这个“；”就被去掉了。OK！
+
+2. doc1600: test-10data(1)里面 Southeast Alaskan Indian Cultural Center 被正确地检测出来了，但到data test-10data(3)里面成了"Southeast Alaskan Indian" "Cultural Center"
+（跟下看看怎么回事）
+解决：我看了，估计和之前的判断有关，需要进一步观察。 doc1600: test-10data(1)当中也没有完全
+检测出来。（1）当中是"Southeast Alaskan Indian" "Cultural Center"。（3）
+当中是“Southeast Alaskan” “Indian”“Cultural Center”；估计和我的一个判断有关，我现在都改回来了。 OK?
+
+3. doc400: 
+wwj's		Placemaker	test(1)里面 		test(3)		Groudtruth
+Demopolis	Demopolis	Demopolis last		Demopolis	Demopolis		
+Demopolis	Demopolis	Demopolis Yacht Club	Demopolis	Demopolis Yacht Club
+
+错误原因：程序里面后来改成了，W和P都找到的先进行GazeSearch，如果有就不用IntegrityTest了
+(1)当中也没全部找出来，只是Demopolis Yacht
+
+总结：将程序改回来，还是要进行IntegrityTest，宁可多找，不要少找，
+多找后面有办法排除，我们的方法是recall-oriented的       		（需处理）
+解决：w,p都找到时，删掉gazetterSearch部分. OK！
+
+4. doc400:
+test(1)和test(3) 里面找出的都是"Southern Yacht Club in New"，wwj找出的是Southern Yacht Club
+和"New Orlens"，P找出的是"New Orlens"，最理想的Groundtruth是"Southern Yacht Club in New Orlens"，但分别找出也能接受
+
+错误原因：我们只向后延伸两个词，且in不在Integrity postfix列表里
+总结：in要加到列表里，对于"xxx in xxx"形式的地名我们只能选择分别找出前后两个POI，因为我们的window大小只有+-2	（需处理）
+解决：in已经加入其中。 现在分别找出来了。OK！
+
+5. doc6400:
+为什么我们的Precision提不上去：
+（1）我们延续了P的错误，我们用的是对P的结果都信任的策略
+（2）我们的算法不够完美，例如不能智能地判断网络搜索的结果
+
+为什么我们的Recall提不上去
+（1）把wwj的结果中正确的一部分排除掉了
+（2）两个都没能检测出来的部分我们也没能检测出来
+（3）用我们的算法也仍然只检测出部分
+
+解决：Waiting!
+
+6. Chicago Art museum
+
+"Chicago" "Art museum"
+Integrity的LMR分析里，加入一个positive的判断	（暂搁置）
+
+解决：Waiting!
+
+7.doc51200
+"Kamerick Art Building)" Integrity之后的标点符没有去掉		（需处理）
+
+
+------------------------------------------------------
+解决：提起wwj的地点名词是，首先就是去掉单词末尾这些标点
+符号，"[\"#$%&'()*+-./:;<=>?@]"。多个标点会去掉多个，注意是[]其中的标点符号  \" 表示 " 
+然后，在加入最后的结果列表时，会去掉末尾的逗号。  OK！
+
+未来两天的任务：
+
+1、采样的时候，人工统计可以发现一些规律，应该记下来；
+
+2、New York数据集没有数据，看看怎么回事；  解决，sql语句写错,OK!
+
+3、先选出两个数据集跑一下，把能正确读入的blog筛选出来，跑下地名提取程序，结果存进数据库；
+	
+
+4、跑出一部分结果之后就可以进行新的采样，重新评估方法和修改程序中的一些规则。
+
+
+
+
+14449
+

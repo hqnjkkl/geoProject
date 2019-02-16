@@ -1,0 +1,12 @@
+ geoProject0.1完成了数据从文本的迁移
+ com.geoImage.dao当中主要是数据库操作对象，负责数据库操作
+ com.geoImage.dataInsert当中是主题的功能类，完成了数据的迁移。
+ 
+ geoProject0.2完成了OPTICS算法
+ 还未验证效果
+ geoProject0.2.0是为了适应svn服务器，改了名字，并没有改程序
+ 使用了svn服务器，就不用一个项目一个项目手动更改了。只用更改名字
+ 
+ 
+ 
+ 
